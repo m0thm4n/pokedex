@@ -6,6 +6,7 @@ This project is to showcase different features of Flutter while making a practic
 ## Features
 
 ### Search Functionality
+
 ![](assets/images/search5.png)
 
 ![](assets/images/search.png)
@@ -18,7 +19,10 @@ This project is to showcase different features of Flutter while making a practic
 
 
 ### Pokedex Functionality
+
 ![](assets/images/pokedex.png)
 
+
 ### Terra Raids Information Functionality
+
 ![](assets/images/terra-raids-page.png)
