@@ -30,6 +30,7 @@ class _SearchState extends State<Search> {
   List<String> listOfAreas = [];
   List<Widget> listOfWidgets = [];
   List<Map<String, dynamic>> listOfEvolution = [{}];
+  List<Map<String, dynamic>> evolutions = [{}];
 
   @override
   void initState() {
@@ -142,10 +143,13 @@ class _SearchState extends State<Search> {
 
       var pokemonImg;
       var pokemonInfo;
+      var pokemonEvolution;
+
+      evolutions.removeAt(0);
 
       for (var i = 0; i < listOfChildren.length; i++) {
         var img = listOfChildren[i].getElementsByTagName('img');
-        var pokemon = listOfChildren[i].getElementsByTagName('span');
+        var pokemon = listOfChildren[i].getElementsByTagName('a.ent-name');
         for (var i = 0; i < img.length; i++) {
           if (img[i]
               .attributes['src']!
@@ -153,10 +157,30 @@ class _SearchState extends State<Search> {
             pokemonImg = img[i].attributes['src'];
             pokemonInfo = pokemon[i].text;
 
-            listOfEvolution.add({"img": pokemonImg, "info": pokemonInfo});
+            listOfEvolution.add({"img": pokemonImg, "info": pokemonInfo,});
           }
         }
       }
+
+      for (var i = 0; i < listOfChildren.length; i++) {
+        var pokemonEvolutions = listOfChildren[i].getElementsByTagName('span.infocard-arrow');
+
+        if (pokemonEvolutions.length == 1) {
+          pokemonEvolution = pokemonEvolutions[0].text;
+
+          evolutions.add({"evolution": pokemonEvolution});
+        } else if (pokemonEvolutions.length == 2) {
+          for (i = 0; i < pokemonEvolutions.length; i++) {
+            pokemonEvolution = pokemonEvolutions[i].text;
+
+            evolutions.add({"evolution": pokemonEvolution});
+          }
+        }
+      }
+
+      print(evolutions);
+
+      listOfEvolution.removeAt(0);
     }
 
     formattedOutput.addAll({
@@ -165,6 +189,7 @@ class _SearchState extends State<Search> {
       'data': mappedData,
       'evolution': listOfEvolution,
       'locations': pokemonLocations,
+      'requiredToEvolve': evolutions,
     });
 
     return formattedOutput;
@@ -407,6 +432,90 @@ class _SearchState extends State<Search> {
                         ),
                       ),
                     ),
+                    if (_html['evolution'].length == 1) (
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      width: double.infinity,
+                      child: Card(
+                        margin: const EdgeInsets.all(5),
+                        elevation: 10,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                '${_html['titles'][5]}\n',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Column(
+                                children: <Widget>[
+                                  Text(
+                                    'This pokemon does not evolve.',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    ),
+                    if (_html['evolution'].length == 2) (
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        width: double.infinity,
+                        child: Card(
+                          margin: const EdgeInsets.all(5),
+                          elevation: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  '${_html['titles'][5]}\n',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Image.network(_html['evolution'][0]['img']),
+                                    const Padding(
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    Text(
+                                      '${_html['evolution'][0]['info']}',
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    Text(
+                                        '${_html['requiredToEvolve'][0]['evolution']}'
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    Image.network(_html['evolution'][1]['img']),
+                                    const Padding(
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    Text(
+                                      '${_html['evolution'][1]['info']}',
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(5),
+                                    ),
+
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ),
+                    if (_html['evolution'].length == 3) (
+
                     Container(
                       padding: const EdgeInsets.all(5),
                       width: double.infinity,
@@ -434,6 +543,12 @@ class _SearchState extends State<Search> {
                                   const Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
+                                  Text(
+                                      '${_html['requiredToEvolve'][0]['evolution']}'
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
+                                  ),
                                   Image.network(_html['evolution'][1]['img']),
                                   const Padding(
                                     padding: EdgeInsets.all(5),
@@ -444,19 +559,29 @@ class _SearchState extends State<Search> {
                                   const Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
+                                  Text(
+                                      '${_html['requiredToEvolve'][1]['evolution']}'
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
+                                  ),
                                   Image.network(_html['evolution'][2]['img']),
                                   const Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
                                   Text(
-                                    '${_html['evolution'][2]['info']}'
+                                      '${_html['evolution'][2]['info']}'
                                   ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
+                                  )
                                 ],
                               ),
                             ],
                           ),
                         ),
                       ),
+                    )
                     ),
                     Container(
                       padding: const EdgeInsets.all(5),
