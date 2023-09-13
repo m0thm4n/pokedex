@@ -76,7 +76,7 @@ class _SearchState extends State<Search> {
     for (var i = 0; i < aTags.length; i++) {
       pokemonImg = aTags
           .where((element) => element.attributes['href']!
-              .contains('https://img.pokemondb.net/artwork/large/'))
+              .contains('https://img.pokemondb.net/artwork/'))
           .toList();
     }
 
